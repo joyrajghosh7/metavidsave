@@ -17,7 +17,6 @@ async function extractMetaVideo(shareUrl) {
         '--disable-dev-shm-usage',
         '--disable-gpu',
         '--no-first-run',
-        
         '--disable-extensions',
         '--disable-background-networking',
         '--disable-default-apps',
@@ -27,11 +26,22 @@ async function extractMetaVideo(shareUrl) {
         '--mute-audio',
         '--no-default-browser-check',
         '--memory-pressure-off',
-        '--js-flags=--max-old-space-size=128'
+        '--js-flags=--max-old-space-size=128',
+        ...(process.env.PROXY_SERVER ? [`--proxy-server=${process.env.PROXY_SERVER}`] : [])
       ]
     });
 
     const page = await browser.newPage();
+
+
+// Authenticate with proxy if configured
+    if (process.env.PROXY_USERNAME && process.env.PROXY_PASSWORD) {
+      await page.authenticate({
+        username: process.env.PROXY_USERNAME,
+        password: process.env.PROXY_PASSWORD
+      });
+    }
+
 
     // Spoof a real browser user-agent
     await page.setUserAgent(
