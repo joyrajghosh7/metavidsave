@@ -91,6 +91,19 @@ async function extractMetaVideo(shareUrl) {
       timeout: 30000
     });
 
+// DEBUG: log page title and a snippet of body text to diagnose blocked/login pages
+    try {
+      const debugInfo = await page.evaluate(() => ({
+        title: document.title,
+        bodyText: document.body.innerText.slice(0, 500)
+      }));
+      console.log('[extract][debug] title:', debugInfo.title);
+      console.log('[extract][debug] body snippet:', debugInfo.bodyText);
+    } catch (e) {
+      console.log('[extract][debug] failed to read page:', e.message);
+    }
+
+
     // Wait a bit for lazy-loaded video to kick in
     await new Promise(r => setTimeout(r, 3000));
 
