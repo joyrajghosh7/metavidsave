@@ -19,7 +19,16 @@ async function extractMetaVideo(shareUrl) {
         '--no-first-run',
         '--no-zygote',
         '--single-process',
-        '--disable-extensions'
+        '--disable-extensions',
+        '--disable-background-networking',
+        '--disable-default-apps',
+        '--disable-sync',
+        '--disable-translate',
+        '--metrics-recording-only',
+        '--mute-audio',
+        '--no-default-browser-check',
+        '--memory-pressure-off',
+        '--js-flags=--max-old-space-size=128'
       ]
     });
 
