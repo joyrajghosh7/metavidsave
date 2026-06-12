@@ -1,0 +1,553 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Meta AI Video Downloader — Save HD MP4</title>
+<meta name="description" content="Download Meta AI videos as HD MP4. Paste your meta.ai share link and save instantly. Free, no watermark, no signup."/>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet"/>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#f5f3ff;--white:#fff;--surface:#faf9ff;
+  --border:#e4e0ff;--border2:#ccc8ff;
+  --blue:#0082fb;--purple:#7856ff;
+  --grad:linear-gradient(135deg,#0082fb,#7856ff,#ff3dbf);
+  --text:#0d0d1a;--muted:#6b6888;--muted2:#9b98b8;
+  --success:#00c27a;--danger:#ef4444;
+  --shadow:0 4px 24px rgba(120,86,255,.08),0 1px 4px rgba(0,0,0,.06);
+  --shadow-lg:0 8px 40px rgba(120,86,255,.14),0 2px 8px rgba(0,0,0,.08);
+}
+body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;overflow-x:hidden}
+body::before{
+  content:'';position:fixed;inset:0;pointer-events:none;z-index:0;
+  background:
+    radial-gradient(ellipse 600px 400px at 10% 0%,rgba(120,86,255,.07),transparent 70%),
+    radial-gradient(ellipse 500px 300px at 90% 100%,rgba(0,130,251,.06),transparent 70%);
+}
+.page{position:relative;z-index:1;max-width:780px;margin:0 auto;padding:0 1.25rem 5rem}
+
+/* NAV */
+nav{display:flex;align-items:center;justify-content:space-between;padding:1.4rem 0;margin-bottom:.5rem}
+.brand{display:flex;align-items:center;gap:10px;text-decoration:none}
+.brand-logo{width:38px;height:38px;border-radius:10px;background:var(--grad);display:flex;align-items:center;justify-content:center;box-shadow:0 4px 14px rgba(120,86,255,.35)}
+.brand-logo svg{width:20px;height:20px;fill:#fff}
+.brand-name{font-family:'Space Grotesk',sans-serif;font-size:1.1rem;font-weight:700;color:var(--text)}
+.brand-name span{background:var(--grad);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.nav-pill{font-size:10px;font-weight:600;padding:3px 10px;border-radius:20px;background:rgba(120,86,255,.1);color:var(--purple);border:1px solid rgba(120,86,255,.2)}
+
+/* HERO */
+.hero{text-align:center;padding:2.5rem 0 2.8rem}
+.hero-badge{display:inline-flex;align-items:center;gap:7px;font-size:12px;font-weight:600;letter-spacing:.4px;color:var(--purple);background:rgba(120,86,255,.08);border:1px solid rgba(120,86,255,.18);padding:5px 14px;border-radius:20px;margin-bottom:1.4rem}
+.badge-dot{width:7px;height:7px;border-radius:50%;background:var(--purple);animation:blink 1.6s infinite}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:.2}}
+.hero h1{font-family:'Space Grotesk',sans-serif;font-size:clamp(2rem,5.5vw,3.2rem);font-weight:700;line-height:1.1;letter-spacing:-1.5px;margin-bottom:1rem}
+.grad{background:var(--grad);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.hero p{color:var(--muted);font-size:1rem;line-height:1.7;max-width:500px;margin:0 auto 1.5rem}
+.trust{display:flex;align-items:center;justify-content:center;gap:1.5rem;flex-wrap:wrap}
+.trust-item{display:flex;align-items:center;gap:5px;font-size:12px;color:var(--muted2);font-weight:500}
+.trust-item svg{width:13px;height:13px;stroke:var(--success);fill:none;stroke-width:2.5}
+
+/* CARD */
+.card{background:var(--white);border:1px solid var(--border);border-radius:24px;padding:2rem;box-shadow:var(--shadow-lg);margin-bottom:1.5rem}
+.card-label{display:flex;align-items:center;gap:8px;font-size:11px;font-weight:600;letter-spacing:1px;text-transform:uppercase;color:var(--muted2);margin-bottom:12px}
+.step-circle{width:20px;height:20px;border-radius:50%;background:var(--grad);display:flex;align-items:center;justify-content:center;font-size:10px;color:#fff;font-weight:700;flex-shrink:0}
+
+/* Input */
+.input-row{display:flex;align-items:center;gap:8px;background:var(--surface);border:1.5px solid var(--border2);border-radius:14px;padding:10px 12px;transition:border-color .2s,box-shadow .2s;margin-bottom:14px}
+.input-row:focus-within{border-color:var(--purple);box-shadow:0 0 0 3px rgba(120,86,255,.12)}
+.input-row svg{flex-shrink:0;color:var(--muted2);width:18px;height:18px;display:block}
+.url-input{flex:1;border:none;outline:none;background:none;font-family:'Inter',sans-serif;font-size:.9rem;color:var(--text);min-width:0}
+.url-input::placeholder{color:var(--muted2)}
+.paste-btn{flex-shrink:0;display:flex;align-items:center;gap:5px;background:rgba(120,86,255,.07);border:1px solid rgba(120,86,255,.18);border-radius:8px;color:var(--purple);padding:6px 12px;font-size:12px;font-weight:600;font-family:'Inter',sans-serif;cursor:pointer;white-space:nowrap;transition:all .15s}
+.paste-btn:hover{background:rgba(120,86,255,.14)}
+.paste-btn svg{width:13px;height:13px}
+
+/* Main button */
+.main-btn{width:100%;display:flex;align-items:center;justify-content:center;gap:10px;background:var(--grad);border:none;border-radius:14px;color:#fff;padding:15px 24px;font-size:1rem;font-weight:700;font-family:'Space Grotesk',sans-serif;cursor:pointer;box-shadow:0 6px 24px rgba(120,86,255,.35);transition:opacity .15s,transform .1s,box-shadow .2s;position:relative;overflow:hidden}
+.main-btn::after{content:'';position:absolute;inset:0;background:linear-gradient(135deg,rgba(255,255,255,.12),transparent)}
+.main-btn:hover:not(:disabled){opacity:.92;box-shadow:0 8px 32px rgba(120,86,255,.45)}
+.main-btn:active:not(:disabled){transform:scale(.98)}
+.main-btn:disabled{opacity:.45;cursor:not-allowed}
+.main-btn svg{width:20px;height:20px;flex-shrink:0}
+
+/* Progress */
+.prog-wrap{display:none;margin-top:16px;background:var(--surface);border:1px solid var(--border);border-radius:16px;padding:1.2rem 1.4rem}
+.prog-wrap.show{display:block}
+.prog-head{display:flex;align-items:center;gap:10px;margin-bottom:12px}
+.spinner{width:28px;height:28px;border-radius:50%;flex-shrink:0;border:2.5px solid var(--border2);border-top-color:var(--purple);animation:spin .7s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+.prog-title{font-size:.9rem;font-weight:600}
+.prog-sub{font-size:.78rem;color:var(--muted);margin-top:2px}
+.prog-bar-bg{height:4px;background:var(--border);border-radius:4px;overflow:hidden;margin-bottom:10px}
+.prog-bar{height:100%;background:var(--grad);border-radius:4px;width:0%;transition:width .5s ease}
+.prog-steps{display:flex;gap:6px;flex-wrap:wrap}
+.ps{font-size:10px;font-weight:600;padding:3px 10px;border-radius:20px;background:var(--border);color:var(--muted2);transition:all .3s}
+.ps.active{background:rgba(120,86,255,.12);color:var(--purple);border:1px solid rgba(120,86,255,.25)}
+.ps.done{background:rgba(0,194,122,.1);color:var(--success);border:1px solid rgba(0,194,122,.25)}
+
+/* Error */
+.err{display:none;margin-top:12px;background:#fff8f8;border:1px solid rgba(239,68,68,.25);border-radius:12px;padding:12px 16px;font-size:.85rem;color:#b91c1c;line-height:1.6}
+.err.show{display:block}
+
+/* Result */
+.result{display:none;margin-top:16px;animation:fadeUp .4s ease}
+.result.show{display:block}
+@keyframes fadeUp{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
+.result-card{background:var(--white);border:1px solid var(--border);border-radius:20px;overflow:hidden;box-shadow:var(--shadow)}
+
+/* Video */
+.vid-wrap{background:#0a0a14;aspect-ratio:16/9;display:flex;align-items:center;justify-content:center;position:relative;overflow:hidden}
+.vid-wrap video{width:100%;height:100%;object-fit:contain}
+.vid-placeholder{display:flex;flex-direction:column;align-items:center;gap:10px;color:rgba(255,255,255,.2)}
+.vid-placeholder svg{width:52px;height:52px}
+.vid-placeholder span{font-size:.8rem}
+.hd-tag{position:absolute;top:10px;right:10px;background:rgba(0,0,0,.6);backdrop-filter:blur(4px);border-radius:6px;padding:3px 8px;font-size:11px;font-weight:700;color:#fff;letter-spacing:.5px}
+
+/* Meta info */
+.rmeta{padding:1.2rem 1.4rem}
+.rmeta-top{display:flex;align-items:center;gap:12px;margin-bottom:1rem}
+.ricon{width:44px;height:44px;border-radius:12px;background:var(--grad);flex-shrink:0;display:flex;align-items:center;justify-content:center;box-shadow:0 4px 14px rgba(120,86,255,.3)}
+.ricon svg{width:22px;height:22px;fill:#fff}
+.rname{font-size:.95rem;font-weight:600;word-break:break-all;margin-bottom:5px}
+.rbadges{display:flex;gap:6px;flex-wrap:wrap}
+.rb{font-size:10px;font-weight:600;padding:3px 9px;border-radius:20px;border:1px solid var(--border);color:var(--muted);background:var(--surface)}
+.rb.g{border-color:rgba(0,194,122,.3);color:var(--success);background:rgba(0,194,122,.07)}
+.rb.p{border-color:rgba(120,86,255,.3);color:var(--purple);background:rgba(120,86,255,.07)}
+.rb.b{border-color:rgba(0,130,251,.3);color:var(--blue);background:rgba(0,130,251,.07)}
+.rurl{font-size:11px;color:var(--muted2);background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:7px 11px;word-break:break-all;line-height:1.5;margin-bottom:1rem;font-family:monospace}
+
+/* Action grid */
+.actions{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.act{display:flex;align-items:center;justify-content:center;gap:8px;padding:12px 16px;border-radius:12px;font-family:'Inter',sans-serif;font-size:.85rem;font-weight:600;cursor:pointer;text-decoration:none;transition:all .15s;border:1.5px solid var(--border2);color:var(--text);background:var(--surface)}
+.act svg{width:16px;height:16px;flex-shrink:0}
+.act:hover{background:var(--bg);border-color:var(--purple);color:var(--purple)}
+.act.primary{background:var(--grad);border-color:transparent;color:#fff;box-shadow:0 4px 18px rgba(120,86,255,.28);position:relative;overflow:hidden}
+.act.primary::after{content:'';position:absolute;inset:0;background:linear-gradient(135deg,rgba(255,255,255,.1),transparent)}
+.act.primary:hover{opacity:.9;box-shadow:0 6px 24px rgba(120,86,255,.4)}
+.act.ok{border-color:var(--success);color:var(--success);background:rgba(0,194,122,.05)}
+
+.rbar{display:flex;align-items:center;gap:8px;padding:10px 14px;border-top:1px solid var(--border);font-size:11px;color:var(--muted)}
+.rdot{width:7px;height:7px;border-radius:50%;background:var(--success);animation:blink 2s infinite;flex-shrink:0}
+
+/* How it works */
+.section{margin-top:3rem}
+.sec-title{font-family:'Space Grotesk',sans-serif;font-size:1.3rem;font-weight:700;letter-spacing:-.5px;margin-bottom:.4rem;text-align:center}
+.sec-sub{font-size:.88rem;color:var(--muted);text-align:center;margin-bottom:2rem}
+.steps{display:grid;grid-template-columns:repeat(4,1fr);gap:14px}
+.step{background:var(--white);border:1px solid var(--border);border-radius:16px;padding:1.2rem;box-shadow:var(--shadow);position:relative;overflow:hidden}
+.step::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:var(--grad)}
+.sico{width:36px;height:36px;border-radius:10px;margin-bottom:.7rem;display:flex;align-items:center;justify-content:center;background:rgba(120,86,255,.08)}
+.sico svg{width:20px;height:20px;fill:var(--purple)}
+.sn{font-size:10px;font-weight:700;color:var(--muted2);letter-spacing:1px;margin-bottom:4px}
+.st{font-size:.85rem;font-weight:700}
+.sd{font-size:.78rem;color:var(--muted);margin-top:3px;line-height:1.5}
+
+/* Features */
+.feats{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-top:1.5rem}
+.feat{background:var(--white);border:1px solid var(--border);border-radius:16px;padding:1.1rem;box-shadow:var(--shadow)}
+.fico{width:34px;height:34px;border-radius:9px;margin-bottom:.6rem;display:flex;align-items:center;justify-content:center}
+.fico svg{width:18px;height:18px}
+.fico.p{background:rgba(120,86,255,.1)} .fico.p svg{fill:var(--purple)}
+.fico.b{background:rgba(0,130,251,.1)} .fico.b svg{fill:var(--blue)}
+.fico.g{background:rgba(0,194,122,.1)} .fico.g svg{fill:var(--success)}
+.ft{font-size:.82rem;font-weight:700;margin-bottom:3px}
+.fd{font-size:.75rem;color:var(--muted);line-height:1.5}
+
+/* FAQ */
+.faqs{margin-top:1.5rem;display:flex;flex-direction:column;gap:10px}
+.faq{background:var(--white);border:1px solid var(--border);border-radius:14px;overflow:hidden;cursor:pointer;transition:box-shadow .2s}
+.faq:hover{box-shadow:var(--shadow)}
+.faq-q{display:flex;align-items:center;justify-content:space-between;padding:.9rem 1.1rem;font-size:.88rem;font-weight:600;gap:12px}
+.faq-q svg{width:16px;height:16px;flex-shrink:0;color:var(--muted2);transition:transform .25s;fill:none;stroke:currentColor;stroke-width:2.5}
+.faq.open .faq-q svg{transform:rotate(180deg)}
+.faq-a{display:none;padding:0 1.1rem .9rem;font-size:.83rem;color:var(--muted);line-height:1.7}
+.faq.open .faq-a{display:block}
+
+/* Footer */
+footer{margin-top:3.5rem;padding-top:1.5rem;border-top:1px solid var(--border);display:flex;flex-direction:column;align-items:center;gap:.6rem;text-align:center}
+.foot-brand{display:flex;align-items:center;gap:8px}
+.foot-brand .brand-logo{width:28px;height:28px;border-radius:7px}
+.foot-brand .brand-logo svg{width:14px;height:14px}
+.foot-links{display:flex;gap:1.2rem;flex-wrap:wrap;justify-content:center}
+.foot-links a{font-size:.78rem;color:var(--muted2);text-decoration:none;transition:color .15s}
+.foot-links a:hover{color:var(--purple)}
+footer p{font-size:.75rem;color:var(--muted2)}
+
+@media(max-width:600px){
+  .steps{grid-template-columns:1fr 1fr}
+  .feats{grid-template-columns:1fr 1fr}
+  .actions{grid-template-columns:1fr}
+  .hero h1{letter-spacing:-1px}
+  .card{padding:1.25rem}
+  .rmeta{padding:1rem}
+  .nav-pill{display:none}
+}
+@media(max-width:380px){
+  .steps{grid-template-columns:1fr}
+  .feats{grid-template-columns:1fr}
+}
+</style>
+</head>
+<body>
+<div class="page">
+
+<!-- NAV -->
+<nav>
+  <a class="brand" href="/">
+    <div class="brand-logo"><svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 14.5v-9l6 4.5-6 4.5z"/></svg></div>
+    <span class="brand-name">Meta<span>VidSave</span></span>
+  </a>
+  <span class="nav-pill">Free · No Signup</span>
+</nav>
+
+<!-- HERO -->
+<div class="hero">
+  <div class="hero-badge"><span class="badge-dot"></span> Meta AI Video Downloader</div>
+  <h1>Download <span class="grad">Meta AI Videos</span><br>as HD MP4</h1>
+  <p>Paste your Meta AI share link and save your AI-generated video instantly — with audio, no watermark, no signup required.</p>
+  <div class="trust">
+    <span class="trust-item"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>100% Free</span>
+    <span class="trust-item"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>No Watermark</span>
+    <span class="trust-item"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>HD Quality</span>
+    <span class="trust-item"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>Mobile Friendly</span>
+  </div>
+</div>
+
+<!-- MAIN CARD -->
+<div class="card">
+  <div class="card-label"><div class="step-circle">1</div>Paste your Meta AI share link</div>
+  <div class="input-row">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10 13a5 5 0 007.54.54l3-3a5 5 0 00-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 00-7.54-.54l-3 3a5 5 0 007.07 7.07l1.71-1.71"/></svg>
+    <input class="url-input" id="urlInput" type="url" placeholder="https://www.meta.ai/share/m/..." autocomplete="off" spellcheck="false"/>
+    <button class="paste-btn" onclick="pasteURL()">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2"/><rect x="9" y="3" width="6" height="4" rx="1"/></svg>
+      Paste
+    </button>
+  </div>
+  <button class="main-btn" id="mainBtn" onclick="startDownload()">
+    <svg viewBox="0 0 24 24" fill="currentColor"><path d="M5 20h14v-2H5m14-9h-4V3H9v6H5l7 7 7-7z"/></svg>
+    Download Meta AI Video
+  </button>
+  <div class="err" id="errBox"></div>
+
+  <!-- Progress -->
+  <div class="prog-wrap" id="progWrap">
+    <div class="prog-head">
+      <div class="spinner"></div>
+      <div>
+        <div class="prog-title" id="progTitle">Connecting to Meta AI…</div>
+        <div class="prog-sub" id="progSub">Analyzing your share link</div>
+      </div>
+    </div>
+    <div class="prog-bar-bg"><div class="prog-bar" id="progBar"></div></div>
+    <div class="prog-steps">
+      <span class="ps" id="ps1">Validating link</span>
+      <span class="ps" id="ps2">Fetching page</span>
+      <span class="ps" id="ps3">Extracting video</span>
+      <span class="ps" id="ps4">Preparing download</span>
+    </div>
+  </div>
+</div>
+
+<!-- RESULT -->
+<div class="result" id="result">
+  <div class="result-card">
+    <div class="vid-wrap" id="vidWrap">
+      <div class="vid-placeholder" id="vidPlaceholder">
+        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 14.5v-9l6 4.5-6 4.5z"/></svg>
+        <span>Meta AI Video</span>
+      </div>
+      <span class="hd-tag" id="hdTag" style="display:none">HD</span>
+    </div>
+    <div class="rmeta">
+      <div class="rmeta-top">
+        <div class="ricon"><svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 14.5v-9l6 4.5-6 4.5z"/></svg></div>
+        <div>
+          <div class="rname" id="rname">Meta AI Video</div>
+          <div class="rbadges">
+            <span class="rb p">Meta AI</span>
+            <span class="rb b">HD MP4</span>
+            <span class="rb g">No Watermark</span>
+            <span class="rb" id="durBadge" style="display:none">0:00</span>
+          </div>
+        </div>
+      </div>
+      <div class="rurl" id="rurl"></div>
+      <div class="actions">
+        <a class="act primary" id="dlBtn" href="#" download>
+          <svg viewBox="0 0 24 24" fill="currentColor"><path d="M5 20h14v-2H5m14-9h-4V3H9v6H5l7 7 7-7z"/></svg>
+          Save HD MP4
+        </a>
+        <button class="act" id="copyBtn" onclick="copyLink()">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg>
+          Copy Link
+        </button>
+        <button class="act" onclick="openInTab()">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+          Open in Tab
+        </button>
+        <button class="act" onclick="resetAll()">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="1 4 1 10 7 10"/><path d="M3.51 15a9 9 0 100 .5-4.1"/></svg>
+          New Download
+        </button>
+      </div>
+    </div>
+    <div class="rbar"><div class="rdot"></div><span>Video extracted — save to your device now</span></div>
+  </div>
+</div>
+
+<!-- HOW IT WORKS -->
+<div class="section">
+  <div class="sec-title">How to Download Meta AI Videos</div>
+  <div class="sec-sub">Four simple steps — takes less than 30 seconds</div>
+  <div class="steps">
+    <div class="step"><div class="sico"><svg viewBox="0 0 24 24"><path d="M12 2a10 10 0 100 20A10 10 0 0012 2zm-2 14.5v-9l6 4.5-6 4.5z"/></svg></div><div class="sn">STEP 01</div><div class="st">Create Video</div><div class="sd">Generate a video using Meta AI in your chat</div></div>
+    <div class="step"><div class="sico"><svg viewBox="0 0 24 24"><path d="M18 16.08c-.76 0-1.44.3-1.96.77L8.91 12.7c.05-.23.09-.46.09-.7s-.04-.47-.09-.7l7.05-4.11c.54.5 1.25.81 2.04.81 1.66 0 3-1.34 3-3s-1.34-3-3-3-3 1.34-3 3c0 .24.04.47.09.7L8.04 9.81C7.5 9.31 6.79 9 6 9c-1.66 0-3 1.34-3 3s1.34 3 3 3c.79 0 1.5-.31 2.04-.81l7.12 4.16c-.05.21-.08.43-.08.65 0 1.61 1.31 2.92 2.92 2.92s2.92-1.31 2.92-2.92c0-1.61-1.31-2.92-2.92-2.92z"/></svg></div><div class="sn">STEP 02</div><div class="st">Copy Share Link</div><div class="sd">Click Share and copy the video URL</div></div>
+    <div class="step"><div class="sico"><svg viewBox="0 0 24 24"><path d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"/></svg></div><div class="sn">STEP 03</div><div class="st">Paste URL</div><div class="sd">Paste it into the input box above</div></div>
+    <div class="step"><div class="sico"><svg viewBox="0 0 24 24"><path d="M5 20h14v-2H5m14-9h-4V3H9v6H5l7 7 7-7z"/></svg></div><div class="sn">STEP 04</div><div class="st">Save MP4</div><div class="sd">Download your HD video instantly</div></div>
+  </div>
+</div>
+
+<!-- FEATURES -->
+<div class="section">
+  <div class="sec-title">Why Use MetaVidSave</div>
+  <div class="sec-sub">Everything you need, nothing you don't</div>
+  <div class="feats">
+    <div class="feat"><div class="fico p"><svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 14.5v-9l6 4.5-6 4.5z"/></svg></div><div class="ft">HD MP4 Quality</div><div class="fd">Full resolution with synchronized audio</div></div>
+    <div class="feat"><div class="fico g"><svg viewBox="0 0 24 24"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg></div><div class="ft">No Watermark</div><div class="fd">Clean file ready for editing and sharing</div></div>
+    <div class="feat"><div class="fico b"><svg viewBox="0 0 24 24"><path d="M11.99 2C6.47 2 2 6.48 2 12s4.47 10 9.99 10C17.52 22 22 17.52 22 12S17.52 2 11.99 2zm4.24 16L12 15.45 7.77 18l1.12-4.81-3.73-3.23 4.92-.42L12 5l1.92 4.53 4.92.42-3.73 3.23L16.23 18z"/></svg></div><div class="ft">100% Free</div><div class="fd">No signup, no credits, no subscription</div></div>
+    <div class="feat"><div class="fico p"><svg viewBox="0 0 24 24"><path d="M17 1.01L7 1c-1.1 0-2 .9-2 2v18c0 1.1.9 2 2 2h10c1.1 0 2-.9 2-2V3c0-1.1-.9-1.99-2-1.99zM17 19H7V5h10v14z"/></svg></div><div class="ft">Mobile Ready</div><div class="fd">Works on iPhone, Android, and desktop</div></div>
+    <div class="feat"><div class="fico g"><svg viewBox="0 0 24 24"><path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4z"/></svg></div><div class="ft">Private &amp; Secure</div><div class="fd">Your links are never stored</div></div>
+    <div class="feat"><div class="fico b"><svg viewBox="0 0 24 24"><path d="M13 2.05v2.02c3.95.49 7 3.85 7 7.93 0 3.21-1.81 6-4.72 7.72L13 17v5h5l-1.22-1.22C19.91 19.07 22 15.76 22 12c0-5.18-3.95-9.45-9-9.95zM11 2.05C5.95 2.55 2 6.82 2 12c0 3.76 2.09 7.07 5.22 8.78L6 22h5v-5l-2.28 2.28C6.81 18 5 15.21 5 12c0-4.08 3.05-7.44 7-7.93V2.05z"/></svg></div><div class="ft">Instant Process</div><div class="fd">Video ready in seconds</div></div>
+  </div>
+</div>
+
+<!-- FAQ -->
+<div class="section">
+  <div class="sec-title">Frequently Asked Questions</div>
+  <div class="sec-sub">Everything you need to know</div>
+  <div class="faqs">
+    <div class="faq" onclick="toggleFaq(this)"><div class="faq-q">How do I download a Meta AI video?<svg viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></svg></div><div class="faq-a">Copy the share link from Meta AI (click the Share button on your generated video), paste it into the input box above, and click "Download Meta AI Video". Your HD MP4 will be ready in seconds.</div></div>
+    <div class="faq" onclick="toggleFaq(this)"><div class="faq-q">Is this tool free to use?<svg viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></svg></div><div class="faq-a">Yes, completely free. No account, no subscription, no credits needed. Just paste and download.</div></div>
+    <div class="faq" onclick="toggleFaq(this)"><div class="faq-q">Will the video include audio?<svg viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></svg></div><div class="faq-a">Yes. The downloaded MP4 includes the full audio track, perfectly synchronized with the video.</div></div>
+    <div class="faq" onclick="toggleFaq(this)"><div class="faq-q">Does the video have a watermark?<svg viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></svg></div><div class="faq-a">No. You get a clean MP4 file without any platform watermark, ready for editing and sharing.</div></div>
+    <div class="faq" onclick="toggleFaq(this)"><div class="faq-q">Why did my download fail?<svg viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></svg></div><div class="faq-a">Make sure you're pasting a valid Meta AI share link (starting with meta.ai/share/). Links may expire — save your videos shortly after generating them.</div></div>
+    <div class="faq" onclick="toggleFaq(this)"><div class="faq-q">Do you store my videos?<svg viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></svg></div><div class="faq-a">No. We only process your link to find the video URL and deliver it to your device. Nothing is stored on our servers.</div></div>
+  </div>
+</div>
+
+<!-- FOOTER -->
+<footer>
+  <div class="foot-brand">
+    <div class="brand-logo"><svg viewBox="0 0 24 24" fill="white"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 14.5v-9l6 4.5-6 4.5z"/></svg></div>
+    <span class="brand-name">Meta<span>VidSave</span></span>
+  </div>
+  <div class="foot-links">
+    <a href="#">How It Works</a><a href="#">FAQ</a>
+    <a href="#">Privacy Policy</a><a href="#">Terms of Service</a><a href="#">Contact</a>
+  </div>
+  <p>Not affiliated with or endorsed by Meta Platforms, Inc. Always respect copyright and platform terms.</p>
+  <p>© 2026 MetaVidSave. All rights reserved.</p>
+</footer>
+
+</div>
+
+<script>
+// ── Config ──
+// In production this is same-origin, so just '/api/extract'
+const API_BASE = '';
+
+let currentVideoUrl = '';
+let currentFilename = '';
+let progTimer = null;
+
+const $id = id => document.getElementById(id);
+
+// ── Validation ──
+function isMetaLink(url){
+  try{
+    const h = new URL(url).hostname.replace(/^www\./,'');
+    return h === 'meta.ai' || h.endsWith('.meta.ai');
+  }catch{ return false; }
+}
+
+// ── Paste ──
+async function pasteURL(){
+  try{
+    const t = await navigator.clipboard.readText();
+    $id('urlInput').value = t.trim();
+    hideErr();
+  }catch{ $id('urlInput').focus(); }
+}
+
+// ── Error ──
+const showErr = msg => { const b=$id('errBox'); b.innerHTML=msg; b.className='err show'; };
+const hideErr = () => { $id('errBox').className='err'; };
+
+// ── Progress steps ──
+const STEPS = [
+  {id:'ps1', title:'Connecting to Meta AI…',   sub:'Validating your share link',     pct:15},
+  {id:'ps2', title:'Opening share page…',       sub:'Launching secure browser',       pct:38},
+  {id:'ps3', title:'Extracting video URL…',     sub:'Finding the HD MP4 source',      pct:70},
+  {id:'ps4', title:'Preparing your download…',  sub:'Almost ready!',                  pct:92},
+];
+
+function startProgress(){
+  $id('progWrap').className = 'prog-wrap show';
+  $id('progBar').style.width = '0%';
+  STEPS.forEach(s => $id(s.id).className = 'ps');
+  let i = 0;
+  function tick(){
+    if(i >= STEPS.length) return;
+    if(i > 0) $id(STEPS[i-1].id).className = 'ps done';
+    const s = STEPS[i];
+    $id(s.id).className = 'ps active';
+    $id('progTitle').textContent = s.title;
+    $id('progSub').textContent = s.sub;
+    $id('progBar').style.width = s.pct + '%';
+    i++;
+    progTimer = setTimeout(tick, 900 + Math.random()*600);
+  }
+  tick();
+}
+
+function finishProgress(success){
+  if(progTimer){ clearTimeout(progTimer); progTimer=null; }
+  STEPS.forEach(s => $id(s.id).className = success ? 'ps done' : 'ps');
+  $id('progBar').style.width = success ? '100%' : '0%';
+  if(success){
+    $id('progTitle').textContent = 'Done! Video is ready.';
+    $id('progSub').textContent = 'Your HD MP4 has been extracted';
+  }
+  setTimeout(() => { $id('progWrap').className = 'prog-wrap'; }, 1200);
+}
+
+// ── Main: call backend API ──
+async function startDownload(){
+  hideErr();
+  $id('result').className = 'result';
+  const url = $id('urlInput').value.trim();
+
+  if(!url){ showErr('⚠ Please paste a Meta AI share link first.'); return; }
+  if(!isMetaLink(url)){
+    showErr('⚠ This doesn\'t look like a Meta AI share link.<br>It should start with <strong>https://www.meta.ai/share/m/...</strong><br>Go to Meta AI, click the Share button on your video, and copy that link.');
+    return;
+  }
+
+  $id('mainBtn').disabled = true;
+  startProgress();
+
+  try {
+    const resp = await fetch(API_BASE + '/api/extract', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ url })
+    });
+
+    const data = await resp.json();
+
+    if(!resp.ok || data.error){
+      throw new Error(data.error || 'Extraction failed. Please try again.');
+    }
+
+    finishProgress(true);
+    currentVideoUrl = data.videoUrl;
+    currentFilename = data.filename || 'meta-ai-video.mp4';
+    showResult(data);
+
+  } catch(err){
+    finishProgress(false);
+    showErr('⚠ ' + (err.message || 'Something went wrong. Please try again.'));
+  } finally {
+    $id('mainBtn').disabled = false;
+  }
+}
+
+// ── Show result ──
+function showResult(data){
+  // Setup download button — use proxy endpoint to avoid CORS
+  const proxyUrl = API_BASE + '/api/download?url=' + encodeURIComponent(data.videoUrl) + '&filename=' + encodeURIComponent(data.filename);
+  $id('dlBtn').href = proxyUrl;
+  $id('dlBtn').download = data.filename;
+
+  $id('rname').textContent = data.title || 'Meta AI Video — ' + data.shareId;
+  $id('rurl').textContent = data.videoUrl;
+  $id('hdTag').style.display = 'block';
+
+  // Try to preview the video
+  const wrap = $id('vidWrap');
+  const placeholder = $id('vidPlaceholder');
+  const old = wrap.querySelector('video');
+  if(old) old.remove();
+
+  const vid = document.createElement('video');
+  vid.controls = true;
+  vid.style.cssText = 'width:100%;height:100%;object-fit:contain';
+  vid.preload = 'metadata';
+
+  vid.onloadedmetadata = () => {
+    placeholder.style.display = 'none';
+    const dur = vid.duration;
+    if(dur && isFinite(dur)){
+      const m = Math.floor(dur/60), s = String(Math.floor(dur%60)).padStart(2,'0');
+      $id('durBadge').textContent = m+':'+s;
+      $id('durBadge').style.display = '';
+    }
+  };
+  vid.onerror = () => { placeholder.style.display = 'flex'; };
+
+  wrap.insertBefore(vid, placeholder);
+  vid.src = proxyUrl;
+
+  $id('result').className = 'result show';
+  $id('result').scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+}
+
+// ── Actions ──
+function copyLink(){
+  navigator.clipboard.writeText(currentVideoUrl).then(() => {
+    const btn = $id('copyBtn');
+    const orig = btn.innerHTML;
+    btn.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg> Copied!';
+    btn.classList.add('ok');
+    setTimeout(() => { btn.innerHTML = orig; btn.classList.remove('ok'); }, 2200);
+  });
+}
+
+function openInTab(){
+  if(currentVideoUrl) window.open(currentVideoUrl, '_blank');
+}
+
+function resetAll(){
+  if(progTimer){ clearTimeout(progTimer); progTimer = null; }
+  $id('urlInput').value = '';
+  $id('result').className = 'result';
+  $id('progWrap').className = 'prog-wrap';
+  hideErr();
+  currentVideoUrl = '';
+  currentFilename = '';
+  $id('mainBtn').disabled = false;
+  $id('hdTag').style.display = 'none';
+  $id('durBadge').style.display = 'none';
+  const wrap = $id('vidWrap');
+  const old = wrap.querySelector('video');
+  if(old) old.remove();
+  $id('vidPlaceholder').style.display = 'flex';
+  $id('urlInput').focus();
+}
+
+// ── FAQ ──
+function toggleFaq(el){
+  const wasOpen = el.classList.contains('open');
+  document.querySelectorAll('.faq.open').forEach(f => f.classList.remove('open'));
+  if(!wasOpen) el.classList.add('open');
+}
+
+// ── Keyboard ──
+$id('urlInput').addEventListener('keydown', e => { if(e.key==='Enter') startDownload(); });
+$id('urlInput').addEventListener('input', hideErr);
+</script>
+</body>
+</html>
